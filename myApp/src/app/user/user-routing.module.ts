@@ -5,28 +5,36 @@ import { LogoutComponent } from './logout/logout.component';
 import { UserComponent } from './user.component';
 
 const routes: Routes = [
-  { path: '', component: UserComponent },
-
-  {
-				path: 'user/login',
-				component: LoginComponent,
-				data: {
-					title: 'Login',
-				
-				}
-		
-    },
-
-    {
-      path: 'user/logout',
-      component: LogoutComponent,
-      data: {
-        title: 'Logout',
-      
-      }
   
-  }
-];
+		
+  { path: '',
+  component: UserComponent,
+  children: [
+    {
+          path: '/user/login',
+          component: LoginComponent,
+          data: {
+            title: 'Login',
+          
+          }
+      
+      },
+  
+      {
+        path: '/user/logout',
+        component: LogoutComponent,
+        data: {
+          title: 'Logout',
+        
+        }
+    
+    }
+  ]
+
+
+
+   }
+ ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

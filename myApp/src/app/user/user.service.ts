@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, skip, tap } from 'rxjs/operators';
 import { Credentials } from './models/credentials';
 import { User } from './models/user';
+import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { UserModule } from './user.module';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ export class UserService {
   private static readonly storageKey = 'user';
   private static readonly delay = 800;
   private userSubject: BehaviorSubject<User|null>;
+  
 
   constructor() {
     const storedUser = JSON.parse(localStorage.getItem(UserService.storageKey) || 'null');
@@ -22,14 +25,27 @@ export class UserService {
     ).subscribe();
   }
 
+
+  
+  get f(){
+    return this.form.controls;
+  }
+  
+
   get user(): User|null {
     return this.userSubject.value;
   }
 
+  form = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email,Validators.minLength(6)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    
+  });
   get user$(): Observable<User|null> {
     return this.userSubject.asObservable();
   }
 
+ 
   login({ password, email}: Credentials): Observable<User> {
     let obs: Observable<User>;
 
